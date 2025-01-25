@@ -1,0 +1,54 @@
+---
+- hosts: servers
+  become: yes
+
+  vars:
+    arch_mapping:  # Map ansible architecture {{ ansible_architecture }} names to Docker's architecture names
+      x86_64: amd64
+      aarch64: arm64
+
+  # https://docs.docker.com/engine/install/ubuntu/
+  tasks:
+  - name: Update the apt package-index cache i.
+    apt: update_cache=yes
+
+  - name: Install packages pre-reqs for Docker
+    apt:
+      name:
+        - ca-certificates
+        - curl
+
+  - name: Create keyring directory
+    file:
+      path: /etc/apt/keyrings
+      mode: '0755'
+      state: directory
+  
+  - name: Add Docker's official GPG key
+    get_url:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      dest: /etc/apt/keyrings/docker.asc
+  
+  - name: Update perms on downloaded key
+    file:
+      path: /etc/apt/keyrings/docker.asc
+      mode: a+r
+    
+  - name: Add docker repo to sources
+    lineinfile:
+      path: /etc/apt/sources.list.d/docker.list
+      line: "deb [arch={{ arch_mapping[ansible_architecture] | default(ansible_architecture) }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+      state: present
+      create: true
+
+  - name: Update package with new docker
+    apt: update_cache=yes
+
+  - name: Install packages pre-reqs for Docker
+    apt:
+      name:
+        - docker-ce 
+        - docker-ce-cli 
+        - containerd.io 
+        - docker-buildx-plugin 
+        - docker-compose-plugin
