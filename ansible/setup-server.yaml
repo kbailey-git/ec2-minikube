@@ -52,3 +52,6 @@
         - containerd.io 
         - docker-buildx-plugin 
         - docker-compose-plugin
+
+  - name: install minikube
+    role: 
