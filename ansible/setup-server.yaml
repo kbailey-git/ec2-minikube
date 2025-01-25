@@ -55,4 +55,4 @@
 
   - name: install minikube
     roles: 
-      - role: gantsign.minikube
+      - gantsign.minikube
