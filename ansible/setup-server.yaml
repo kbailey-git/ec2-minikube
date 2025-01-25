@@ -53,6 +53,7 @@
         - docker-buildx-plugin 
         - docker-compose-plugin
 
-  - name: install minikube
-    roles: 
-      - gantsign.minikube
+  - name: Install kubectl
+    community.general.snap:
+      name: kubectl
+      classic: yes
