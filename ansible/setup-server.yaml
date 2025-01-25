@@ -54,4 +54,5 @@
         - docker-compose-plugin
 
   - name: install minikube
-    role: 
+    roles: 
+      - role: gantsign.minikube
