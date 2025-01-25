@@ -1,0 +1,13 @@
+name: Ansible test
+on: 
+  push:
+      branches:
+        'testing/*'
+jobs:
+    test-ansible:
+        name   : test ansible galaxy
+        runs-on: ubuntu-latest
+        steps:
+          - name: run ansible galaxy
+            run : ansible-galaxy install gantsign.minikube
+        
